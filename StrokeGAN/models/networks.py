@@ -587,9 +587,9 @@ class NLayerDiscriminator(nn.Module):
         """Standard forward."""
         output = self.model(input)
         label = self.conv1(output)
-        classify = self.conv2(output)
-        # return  label
-        return label, classify
+#        classify = self.conv2(output)
+        return  label
+#        return label, classify
 
 
 
