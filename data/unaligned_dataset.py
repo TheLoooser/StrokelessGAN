@@ -27,7 +27,7 @@ class UnalignedDataset(BaseDataset):
         BaseDataset.__init__(self, opt)
         self.dir_A = os.path.join(opt.dataroot, opt.phase + 'A')  # create a path '/path/to/data/trainA'
         self.dir_B = os.path.join(opt.dataroot, opt.phase + 'B')  # create a path '/path/to/data/trainB'
-        self.label_A = [line.rstrip() for line in open('/data/Font Script.txt', 'r')]
+        self.label_A = [line.rstrip() for line in open('data/Font Script.txt', 'r')]
         self.label_B = [line.rstrip() for line in open('data/Nom Script.txt', 'r')]
         self.train_dataA = []
         self.train_dataB = []
