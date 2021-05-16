@@ -111,30 +111,3 @@ class UnalignedDataset(BaseDataset):
         we take a maximum of
         """
         return max(self.A_size, self.B_size)
-
-if __name__ == '__main__':
-    class optt():
-        phase = 'train'
-        dataroot = '/home/dizzy/Documents/MA/Code/StrokeGAN/StrokeGAN/data'
-
-        max_dataset_size = float("inf")
-        input_nc = 3
-        output_nc = 3
-        direction = 'AtoB'
-        preprocess = 'resize_and_crop'
-        load_size = 286
-        crop_size = 256
-        serial_batches = False
-        no_flip = False
-    opt = optt()
-    dataset = UnalignedDataset(opt)
-    dataloader = torch.utils.data.DataLoader(dataset,batch_size=1)
-    for i, data in enumerate(dataloader):
-        # print(data['B_label'].size(1))
-        if data['A_label'].size(1) != 32:
-
-            print(data['A_paths'])
-        else:
-            continue
-    # print(issubclass(UnalignedDataset, BaseDataset))
-    pass
