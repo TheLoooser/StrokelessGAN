@@ -1,4 +1,4 @@
-# StrokeGAN
+# StrokelessGAN
 **Note**: The current software works well with PyTorch 1.4.
 
 
