@@ -34,13 +34,13 @@ cd StrokeGAN
 - Train a model:
 ```bash
 #train
-python train.py --dataroot ./datasets/data --name data_cyclegan --model cycle_gan
+python train.py --dataroot ./data --name data_cyclegan --model cycle_gan
 ```
 
 - Test the model:
 ```bash
 #!./scripts/test_cyclegan.sh
-python test.py --dataroot ./datasets/data --name data_cyclegan --model cycle_gan
+python test.py --dataroot .data --name data_cyclegan --model cycle_gan
 ```
 
 
