@@ -112,8 +112,8 @@ class CycleGANModel(BaseModel):
         AtoB = self.opt.direction == 'AtoB'
         self.real_A = input['A' if AtoB else 'B'].to(self.device)
         self.real_B = input['B' if AtoB else 'A'].to(self.device)
-        self.real_A_label = input['A_label' if AtoB else 'B_label'].to(self.device)
-        self.real_B_label = input['B_label' if AtoB else 'A_label'].to(self.device)
+#        self.real_A_label = input['A_label' if AtoB else 'B_label'].to(self.device)
+#        self.real_B_label = input['B_label' if AtoB else 'A_label'].to(self.device)
         self.image_paths = input['A_paths' if AtoB else 'B_paths']
 
     def forward(self):
@@ -123,7 +123,7 @@ class CycleGANModel(BaseModel):
         self.fake_A = self.netG_B(self.real_B)  # G_B(B)
         self.rec_B = self.netG_A(self.fake_A)   # G_A(G_B(B))
 
-    def backward_D_basic(self, netD, real, fake,real_label):
+    def backward_D_basic(self, netD, real, fake):
         """Calculate GAN loss for the discriminator
 
         Parameters:
@@ -138,19 +138,20 @@ class CycleGANModel(BaseModel):
         # print("a size is 111111", a.shape)
         # Real
         # print("real_label size is 111111",real_label.shape)
-        pred_real,label_1 = netD(real)
+        pred_real = netD(real)
         loss_D_real = self.criterionGAN(pred_real, True)
         # print("label size is 111111",label_1.shape)
         # Fake
-        pred_fake,label_2 = netD(fake.detach())
+        pred_fake = netD(fake.detach())
         loss_D_fake = self.criterionGAN(pred_fake, False)
 
 
 
-        loss_D_real_label = F.mse_loss(label_1.to(torch.float),real_label.to(torch.float))
-        loss_D_fake_label = F.mse_loss(label_2.to(torch.float), real_label.to(torch.float))
+#        loss_D_real_label = F.mse_loss(label_1.to(torch.float),real_label.to(torch.float))
+#        loss_D_fake_label = F.mse_loss(label_2.to(torch.float), real_label.to(torch.float))
 
-        loss_D = 0.5*(loss_D_real+parameter_label*loss_D_real_label) + (loss_D_fake+parameter_label*loss_D_fake_label)* 0.5
+#        loss_D = 0.5*(loss_D_real+loss_D_real_label) + (loss_D_fake+loss_D_fake_label)* 0.5
+        loss_D = 0.5*(loss_D_real) + (loss_D_fake)* 0.5
 
 
         loss_D.backward()
@@ -159,12 +160,14 @@ class CycleGANModel(BaseModel):
     def backward_D_A(self):
         """Calculate GAN loss for discriminator D_A"""
         fake_B = self.fake_B_pool.query(self.fake_B)
-        self.loss_D_A = self.backward_D_basic(self.netD_A, self.real_B, fake_B,self.real_B_label)
+#        self.loss_D_A = self.backward_D_basic(self.netD_A, self.real_B, fake_B,self.real_B_label)
+        self.loss_D_A = self.backward_D_basic(self.netD_A, self.real_B, fake_B)
 
     def backward_D_B(self):
         """Calculate GAN loss for discriminator D_B"""
         fake_A = self.fake_A_pool.query(self.fake_A)
-        self.loss_D_B = self.backward_D_basic(self.netD_B, self.real_A, fake_A,self.real_A_label)
+#        self.loss_D_B = self.backward_D_basic(self.netD_B, self.real_A, fake_A,self.real_A_label)
+        self.loss_D_B = self.backward_D_basic(self.netD_B, self.real_A, fake_A)
 
     def backward_G(self):
         """Calculate the loss for generators G_A and G_B"""
@@ -211,4 +214,3 @@ class CycleGANModel(BaseModel):
         self.backward_D_A()      # calculate gradients for D_A
         self.backward_D_B()      # calculate graidents for D_B
         self.optimizer_D.step()  # update D_A and D_B's weights
-
