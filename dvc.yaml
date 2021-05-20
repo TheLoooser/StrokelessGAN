@@ -1,0 +1,12 @@
+stages:
+  prepare:
+    cmd: python3 extract-characters/main_run.py ../steles/detected/ ../steles/detected/
+      32 32
+    deps:
+    - extract-characters/load_data.py
+    - extract-characters/main_run.py
+    params:
+    - prepare.height
+    - prepare.width
+    outs:
+    - extract-characters/imgs

@@ -1,0 +1,21 @@
+schema: '2.0'
+stages:
+  prepare:
+    cmd: python3 extract-characters/main_run.py ../steles/detected/ ../steles/detected/
+      32 32
+    deps:
+    - path: extract-characters/load_data.py
+      md5: 9932b92641d83c9b172adc3b42eba301
+      size: 4392
+    - path: extract-characters/main_run.py
+      md5: b1749139b9af64108c469be659e3e229
+      size: 972
+    params:
+      params.yaml:
+        prepare.height: 32
+        prepare.width: 32
+    outs:
+    - path: extract-characters/imgs
+      md5: 7aa8ea5f9acafbe1a0c2aa25fbea14f5.dir
+      size: 33514569
+      nfiles: 35230
