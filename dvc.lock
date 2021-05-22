@@ -19,3 +19,17 @@ stages:
       md5: 7aa8ea5f9acafbe1a0c2aa25fbea14f5.dir
       size: 33514569
       nfiles: 35230
+  cluster:
+    cmd: python3 extract-characters/char_cluster.py
+    deps:
+    - path: extract-characters/char_cluster.py
+      md5: fe847eb133129fe1fcffc0dc7e1f0036
+      size: 5214
+    - path: extract-characters/imgs
+      md5: 7aa8ea5f9acafbe1a0c2aa25fbea14f5.dir
+      size: 33514569
+      nfiles: 35230
+    outs:
+    - path: extract-characters/clusters.json
+      md5: 8da2e7a47319514cc8dc199a3b6bde2e
+      size: 1135

@@ -10,3 +10,10 @@ stages:
     - prepare.width
     outs:
     - extract-characters/imgs
+  cluster:
+    cmd: python3 extract-characters/char_cluster.py 
+    deps:
+    - extract-characters/imgs
+    - extract-characters/char_cluster.py
+    outs:
+    - extract-characters/clusters.json
