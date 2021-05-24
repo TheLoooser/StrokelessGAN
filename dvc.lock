@@ -2,6 +2,37 @@ schema: '2.0'
 stages:
   prepare:
     cmd: python3 extract-characters/main_run.py ../steles/detected/ ../steles/detected/
+      128 128
+    deps:
+    - path: extract-characters/load_data.py
+      md5: 9932b92641d83c9b172adc3b42eba301
+      size: 4392
+    - path: extract-characters/main_run.py
+      md5: b1749139b9af64108c469be659e3e229
+      size: 972
+    params:
+      params.yaml:
+        prepare.height: 128
+        prepare.width: 128
+  cluster:
+    cmd: python3 extract-characters/char_cluster.py
+    deps:
+    - path: extract-characters/char_cluster.py
+      md5: 04f3395ab1cd1d5fc4c4922862568b6e
+      size: 5213
+    - path: extract-characters/imgs
+      md5: 7aa8ea5f9acafbe1a0c2aa25fbea14f5.dir
+      size: 33514569
+      nfiles: 35230
+    params:
+      params.yaml:
+        cluster.k: 21
+    outs:
+    - path: extract-characters/clusters.json
+      md5: d0d1d189cb0f8452c6739532f494ea44
+      size: 1015
+  load:
+    cmd: python3 extract-characters/main_run.py ../steles/detected/ ../steles/detected/
       32 32
     deps:
     - path: extract-characters/load_data.py
@@ -12,24 +43,10 @@ stages:
       size: 972
     params:
       params.yaml:
-        prepare.height: 32
-        prepare.width: 32
+        load.height: 32
+        load.width: 32
     outs:
     - path: extract-characters/imgs
       md5: 7aa8ea5f9acafbe1a0c2aa25fbea14f5.dir
       size: 33514569
       nfiles: 35230
-  cluster:
-    cmd: python3 extract-characters/char_cluster.py
-    deps:
-    - path: extract-characters/char_cluster.py
-      md5: fe847eb133129fe1fcffc0dc7e1f0036
-      size: 5214
-    - path: extract-characters/imgs
-      md5: 7aa8ea5f9acafbe1a0c2aa25fbea14f5.dir
-      size: 33514569
-      nfiles: 35230
-    outs:
-    - path: extract-characters/clusters.json
-      md5: 8da2e7a47319514cc8dc199a3b6bde2e
-      size: 1135

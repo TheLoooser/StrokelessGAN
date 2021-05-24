@@ -1,13 +1,13 @@
 stages:
-  prepare:
+  load:
     cmd: python3 extract-characters/main_run.py ../steles/detected/ ../steles/detected/
       32 32
     deps:
     - extract-characters/load_data.py
     - extract-characters/main_run.py
     params:
-    - prepare.height
-    - prepare.width
+    - load.height
+    - load.width
     outs:
     - extract-characters/imgs
   cluster:
@@ -15,5 +15,17 @@ stages:
     deps:
     - extract-characters/imgs
     - extract-characters/char_cluster.py
+    params:
+    - cluster.k
     outs:
     - extract-characters/clusters.json
+  prepare:
+    cmd: python3 extract-characters/main_run.py ../steles/detected/ ../steles/detected/
+      128 128
+    deps:
+    - extract-characters/load_data.py
+    - extract-characters/main_run.py
+    params:
+    - prepare.height
+    - prepare.width
+
