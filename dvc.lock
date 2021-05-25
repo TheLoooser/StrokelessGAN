@@ -2,25 +2,30 @@ schema: '2.0'
 stages:
   prepare:
     cmd: python3 extract-characters/main_run.py ../steles/detected/ ../steles/detected/
-      128 128
+      cycle
     deps:
     - path: extract-characters/load_data.py
-      md5: 9932b92641d83c9b172adc3b42eba301
-      size: 4392
+      md5: a8bdd46a47061386d74ec7e1e8f31f59
+      size: 4413
     - path: extract-characters/main_run.py
-      md5: b1749139b9af64108c469be659e3e229
-      size: 972
+      md5: 0351d69892c5778f3c755d2680d73374
+      size: 1183
     params:
       params.yaml:
         prepare.height: 128
         prepare.width: 128
+    outs:
+    - path: extract-characters/cycle
+      md5: 7aa8ea5f9acafbe1a0c2aa25fbea14f5.dir
+      size: 33514569
+      nfiles: 35230
   cluster:
     cmd: python3 extract-characters/char_cluster.py
     deps:
     - path: extract-characters/char_cluster.py
       md5: 04f3395ab1cd1d5fc4c4922862568b6e
       size: 5213
-    - path: extract-characters/imgs
+    - path: extract-characters/kmeans
       md5: 7aa8ea5f9acafbe1a0c2aa25fbea14f5.dir
       size: 33514569
       nfiles: 35230
@@ -33,20 +38,42 @@ stages:
       size: 1015
   load:
     cmd: python3 extract-characters/main_run.py ../steles/detected/ ../steles/detected/
-      32 32
+      kmeans
     deps:
     - path: extract-characters/load_data.py
-      md5: 9932b92641d83c9b172adc3b42eba301
-      size: 4392
+      md5: a8bdd46a47061386d74ec7e1e8f31f59
+      size: 4413
     - path: extract-characters/main_run.py
-      md5: b1749139b9af64108c469be659e3e229
-      size: 972
+      md5: 0351d69892c5778f3c755d2680d73374
+      size: 1183
     params:
       params.yaml:
         load.height: 32
         load.width: 32
     outs:
-    - path: extract-characters/imgs
+    - path: extract-characters/kmeans
       md5: 7aa8ea5f9acafbe1a0c2aa25fbea14f5.dir
       size: 33514569
       nfiles: 35230
+  organise:
+    cmd: bash extract-characters/organise.sh /home/jonasd/StrokelessGAN/data/
+    deps:
+    - path: extract-characters/clusters.json
+      md5: d0d1d189cb0f8452c6739532f494ea44
+      size: 1015
+    - path: extract-characters/cycle
+      md5: 7aa8ea5f9acafbe1a0c2aa25fbea14f5.dir
+      size: 33514569
+      nfiles: 35230
+    - path: extract-characters/organise.sh
+      md5: 2b06c20b735817e31ef952b404bc0ab8
+      size: 1375
+    outs:
+    - path: data/trainA
+      md5: 9ac600af633ecc05fe35a24e82df87cb.dir
+      size: 180820160
+      nfiles: 35131
+    - path: data/trainB
+      md5: c76dc356d239ddb57010acb5cb4fb2bc.dir
+      size: 30736669
+      nfiles: 35131

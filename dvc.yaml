@@ -1,7 +1,6 @@
 stages:
   load:
-    cmd: python3 extract-characters/main_run.py ../steles/detected/ ../steles/detected/
-      32 32
+    cmd: python3 extract-characters/main_run.py ../steles/detected/ ../steles/detected/ kmeans
     deps:
     - extract-characters/load_data.py
     - extract-characters/main_run.py
@@ -9,23 +8,32 @@ stages:
     - load.height
     - load.width
     outs:
-    - extract-characters/imgs
+    - extract-characters/kmeans
   cluster:
     cmd: python3 extract-characters/char_cluster.py 
     deps:
-    - extract-characters/imgs
+    - extract-characters/kmeans
     - extract-characters/char_cluster.py
     params:
     - cluster.k
     outs:
     - extract-characters/clusters.json
   prepare:
-    cmd: python3 extract-characters/main_run.py ../steles/detected/ ../steles/detected/
-      128 128
+    cmd: python3 extract-characters/main_run.py ../steles/detected/ ../steles/detected/ cycle
     deps:
     - extract-characters/load_data.py
     - extract-characters/main_run.py
     params:
     - prepare.height
     - prepare.width
-
+    outs:
+    - extract-characters/cycle
+  organise:
+    cmd: bash extract-characters/organise.sh /home/jonasd/StrokelessGAN/data/
+    deps:
+    - extract-characters/organise.sh
+    - extract-characters/clusters.json
+    - extract-characters/cycle
+    outs:
+    - data/trainA
+    - data/trainB
